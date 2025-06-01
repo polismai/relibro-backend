@@ -1,3 +1,4 @@
+import { BookCategory } from 'src/common/enums/book-category.enum';
 import { IImage } from './image.interface';
 
 export interface IBook {
@@ -6,5 +7,6 @@ export interface IBook {
   description: string;
   price: number;
   isAvailable: boolean;
-  images?: IImage[];
+  category: BookCategory;
+  images: IImage[];
 }
