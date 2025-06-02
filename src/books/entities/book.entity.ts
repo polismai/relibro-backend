@@ -2,7 +2,8 @@ import { BookCategory } from 'src/common/enums/book-category.enum';
 import { BaseEntity } from 'src/config/base.entity';
 import { Image } from 'src/images/image.entity';
 import { IBook } from 'src/interfaces/book.interface';
-import { Column, Entity, Index, OneToMany } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Book extends BaseEntity implements IBook {
@@ -31,4 +32,7 @@ export class Book extends BaseEntity implements IBook {
 
   @OneToMany(() => Image, (image) => image.book, { cascade: true })
   images: Image[];
+
+  @ManyToOne(() => User, (user) => user.books, { eager: true })
+  owner: User;
 }
