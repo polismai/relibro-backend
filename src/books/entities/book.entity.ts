@@ -1,7 +1,7 @@
 import { BookCategory } from '../../common/enums/book-category.enum';
 import { BaseEntity } from '../../config/base.entity';
 import { Image } from '../../images/image.entity';
-import { IBook } from '../../interfaces/book.interface';
+import { IBook } from '../../common/interfaces/book.interface';
 import { User } from '../../users/entities/user.entity';
 import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
 

@@ -1,9 +1,10 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { ErrorManager } from 'src/common/utils/error.manager';
 
 @Injectable()
 export class UsersService {
@@ -14,17 +15,35 @@ export class UsersService {
 
   public async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
+      const existingUser = await this.userRepository.findOne({
+        where: { email: createUserDto.email },
+      });
+
+      if (existingUser) {
+        throw new ErrorManager({
+          type: 'CONFLICT',
+          message: 'El usuario ya existe con ese correo.',
+        });
+      }
+
       return await this.userRepository.save(createUserDto);
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findUsers(): Promise<User[]> {
     try {
-      return await this.userRepository.find();
+      const users: User[] = await this.userRepository.find();
+      if (users.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontró resultado',
+        });
+      }
+      return users;
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new ErrorManager.createSignatureError(error.message);
     }
   }
 
@@ -33,46 +52,52 @@ export class UsersService {
       const user = await this.userRepository.findOneBy({ id });
 
       if (!user) {
-        throw new NotFoundException(`User with id ${id} not found`);
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Usuario con id ${id} no fue encontrado`,
+        });
       }
 
       return user;
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async updateUser(
     id: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<UpdateResult | undefined> {
+  ): Promise<UpdateResult> {
     try {
-      const user: UpdateResult = await this.userRepository.update(
-        id,
-        updateUserDto,
-      );
+      const result = await this.userRepository.update(id, updateUserDto);
 
-      if (user.affected === 0) {
-        return undefined;
+      if (result.affected === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se pudo actualizar el usuario',
+        });
       }
 
-      return user;
+      return result;
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async deleteUser(id: string): Promise<DeleteResult | undefined> {
+  public async deleteUser(id: string): Promise<DeleteResult> {
     try {
-      const user: DeleteResult = await this.userRepository.delete(id);
+      const result = await this.userRepository.delete(id);
 
-      if (user.affected === 0) {
-        return undefined;
+      if (result.affected === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se pudo eliminar el usuario',
+        });
       }
 
-      return user;
+      return result;
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new ErrorManager.createSignatureError(error.message);
     }
   }
 }
