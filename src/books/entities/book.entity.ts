@@ -1,8 +1,8 @@
-import { BookCategory } from 'src/common/enums/book-category.enum';
-import { BaseEntity } from 'src/config/base.entity';
-import { Image } from 'src/images/image.entity';
-import { IBook } from 'src/interfaces/book.interface';
-import { User } from 'src/users/entities/user.entity';
+import { BookCategory } from '../../common/enums/book-category.enum';
+import { BaseEntity } from '../../config/base.entity';
+import { Image } from '../../images/image.entity';
+import { IBook } from '../../interfaces/book.interface';
+import { User } from '../../users/entities/user.entity';
 import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()

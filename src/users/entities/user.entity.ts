@@ -1,6 +1,6 @@
-import { Book } from 'src/books/entities/book.entity';
-import { BaseEntity } from 'src/config/base.entity';
-import { IUser } from 'src/interfaces/user.interface';
+import { Book } from '../../books/entities/book.entity';
+import { BaseEntity } from '../../config/base.entity';
+import { IUser } from '../../interfaces/user.interface';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()

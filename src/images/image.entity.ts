@@ -1,6 +1,6 @@
-import { Book } from 'src/books/entities/book.entity';
-import { BaseEntity } from 'src/config/base.entity';
-import { IImage } from 'src/interfaces/image.interface';
+import { Book } from '../books/entities/book.entity';
+import { BaseEntity } from '../config/base.entity';
+import { IImage } from '../interfaces/image.interface';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity()
