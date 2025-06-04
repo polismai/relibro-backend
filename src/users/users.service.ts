@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ErrorManager } from 'src/common/utils/error.manager';
@@ -15,8 +16,10 @@ export class UsersService {
 
   public async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
+      const { email, password } = createUserDto;
+
       const existingUser = await this.userRepository.findOne({
-        where: { email: createUserDto.email },
+        where: { email },
       });
 
       if (existingUser) {
@@ -26,7 +29,17 @@ export class UsersService {
         });
       }
 
-      return await this.userRepository.save(createUserDto);
+      const hashedPassword = await bcrypt.hash(
+        password,
+        Number(process.env.HASH_SALT),
+      );
+
+      const newUser = this.userRepository.create({
+        ...createUserDto,
+        password: hashedPassword,
+      });
+
+      return await this.userRepository.save(newUser);
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
