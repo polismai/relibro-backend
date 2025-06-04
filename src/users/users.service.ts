@@ -28,7 +28,7 @@ export class UsersService {
 
       return await this.userRepository.save(createUserDto);
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
@@ -43,7 +43,7 @@ export class UsersService {
       }
       return users;
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
@@ -60,7 +60,7 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
@@ -80,7 +80,7 @@ export class UsersService {
 
       return result;
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
@@ -97,7 +97,7 @@ export class UsersService {
 
       return result;
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 }

@@ -1,15 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+  Req,
+} from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Post()
-  create(@Body() createBookDto: CreateBookDto) {
-    return this.booksService.create(createBookDto);
+  @UseInterceptors(AnyFilesInterceptor())
+  async createBook(
+    @Body() createBookDto: CreateBookDto,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Req() req,
+  ) {
+    const userId = req.user.id;
+    return this.booksService.createBookWithImages(createBookDto, files, userId);
   }
 
   @Get()

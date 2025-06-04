@@ -3,7 +3,14 @@ import { BaseEntity } from '../../config/base.entity';
 import { Image } from '../../images/image.entity';
 import { IBook } from '../../common/interfaces/book.interface';
 import { User } from '../../users/entities/user.entity';
-import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
 export class Book extends BaseEntity implements IBook {
@@ -13,10 +20,13 @@ export class Book extends BaseEntity implements IBook {
 
   @Index()
   @Column()
-  author: string;
+  author?: string;
+
+  @Column()
+  genre?: string;
 
   @Column({ type: 'text' })
-  description: string;
+  description?: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
@@ -34,5 +44,6 @@ export class Book extends BaseEntity implements IBook {
   images: Image[];
 
   @ManyToOne(() => User, (user) => user.books, { eager: true })
-  owner: User;
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

@@ -20,6 +20,6 @@ export class User extends BaseEntity implements IUser {
   @Column()
   role: string;
 
-  @OneToMany(() => Book, (book) => book.owner)
+  @OneToMany(() => Book, (book) => book.user)
   books: Book[];
 }
