@@ -77,6 +77,23 @@ export class UsersService {
     }
   }
 
+  public async findUserByEmail(email: string): Promise<User> {
+    try {
+      const user = await this.userRepository.findOneBy({ email });
+
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Usuario con email ${email} no fue encontrado`,
+        });
+      }
+
+      return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async updateUser(
     id: string,
     updateUserDto: UpdateUserDto,
