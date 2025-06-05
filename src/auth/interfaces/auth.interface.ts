@@ -14,3 +14,16 @@ export interface AuthResponse {
   accessToken: string;
   user: User;
 }
+
+export interface AuthTokenResult {
+  role: string;
+  sub: string;
+  iat: number;
+  exp: number;
+}
+
+export interface IUseToken {
+  role: string;
+  sub: string;
+  isExpired: boolean;
+}
