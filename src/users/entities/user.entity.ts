@@ -3,6 +3,7 @@ import { BaseEntity } from '../../config/base.entity';
 import { IUser } from '../../common/interfaces/user.interface';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Role } from '../../common/enums/role.enum';
 
 @Entity()
 export class User extends BaseEntity implements IUser {
@@ -19,8 +20,8 @@ export class User extends BaseEntity implements IUser {
   @Column()
   password: string;
 
-  @Column()
-  role: string;
+  @Column({ type: 'enum', enum: Role })
+  role: Role;
 
   @OneToMany(() => Book, (book) => book.user)
   books: Book[];
