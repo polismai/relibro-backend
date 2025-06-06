@@ -4,10 +4,14 @@ import * as jwt from 'jsonwebtoken';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { PayloadToken } from '../interfaces/auth.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
+  ) {}
 
   public async validateUser(
     email: string,
@@ -45,8 +49,8 @@ export class AuthService {
     return {
       accessToken: this.signJWT({
         payload,
-        secret: process.env.JWT_SECRET,
-        expires: '1h',
+        secret: this.configService.get<string>('JWT_SECRET'),
+        expires: this.configService.get<string>('JWT_EXPIRES_IN'),
       }),
       user,
     };
