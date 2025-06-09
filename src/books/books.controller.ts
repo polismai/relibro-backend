@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFiles,
   Req,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -21,32 +22,39 @@ export class BooksController {
 
   @Post()
   @UseInterceptors(AnyFilesInterceptor())
-  async createBook(
+  public async createBook(
     @Body() createBookDto: CreateBookDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Req() req,
   ) {
     const userId = req.user.id;
-    return this.booksService.createBookWithImages(createBookDto, files, userId);
+    return await this.booksService.createBookWithImages(
+      createBookDto,
+      files,
+      userId,
+    );
   }
 
   @Get()
-  findAll() {
-    return this.booksService.findAll();
+  public async findBooks() {
+    return await this.booksService.findBooks();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.booksService.findOne(+id);
+  public async findBookById(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.booksService.findBookById(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
+  public async updateBook(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateBookDto: UpdateBookDto,
+  ) {
+    return await this.booksService.updateBook(id, updateBookDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.booksService.remove(+id);
+  public async deleteBook(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.booksService.deleteBook(id);
   }
 }

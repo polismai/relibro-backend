@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,20 +32,20 @@ export class UsersController {
   }
 
   @Get(':id')
-  public async findUserById(@Param('id') id: string) {
+  public async findUserById(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.usersService.findUserById(id);
   }
 
   @Patch(':id')
   public async updateUser(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return await this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')
-  public async deleteUser(@Param('id') id: string) {
+  public async deleteUser(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.usersService.deleteUser(id);
   }
 }

@@ -47,11 +47,11 @@ export class UsersService {
 
   public async findUsers(): Promise<User[]> {
     try {
-      const users: User[] = await this.userRepository.find();
+      const users = await this.userRepository.find();
       if (users.length === 0) {
         throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontró resultado',
+          type: 'NOT_FOUND',
+          message: 'No se encontraron usuarios',
         });
       }
       return users;
@@ -99,6 +99,8 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
   ): Promise<UpdateResult> {
     try {
+      await this.findUserById(id);
+
       const result = await this.userRepository.update(id, updateUserDto);
 
       if (result.affected === 0) {
@@ -116,6 +118,8 @@ export class UsersService {
 
   public async deleteUser(id: string): Promise<DeleteResult> {
     try {
+      await this.findUserById(id);
+
       const result = await this.userRepository.delete(id);
 
       if (result.affected === 0) {

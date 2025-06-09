@@ -4,7 +4,7 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
 import { ErrorManager } from 'src/common/utils/error.manager';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Image } from 'src/images/image.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
@@ -24,7 +24,7 @@ export class BooksService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  async createBookWithImages(
+  public async createBookWithImages(
     createBookDto: CreateBookDto,
     files: Express.Multer.File[],
     userId: string,
@@ -58,20 +58,69 @@ export class BooksService {
     return savedBook;
   }
 
-  findAll() {
-    return `This action returns all books`;
+  public async findBooks(): Promise<Book[]> {
+    try {
+      return await this.bookRepository.find();
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  public async findBookById(id: string): Promise<Book> {
+    try {
+      const book = await this.bookRepository.findOneBy({ id });
+
+      if (!book) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Libro con id ${id} no fue encontrado`,
+        });
+      }
+
+      return book;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+  public async updateBook(
+    id: string,
+    updateBookDto: UpdateBookDto,
+  ): Promise<UpdateResult> {
+    try {
+      await this.findBookById(id);
+
+      const result = await this.bookRepository.update(id, updateBookDto);
+
+      if (result.affected === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'El libro no se pudo actualizar',
+        });
+      }
+
+      return result;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  public async deleteBook(id: string): Promise<DeleteResult> {
+    try {
+      await this.findBookById(id);
+
+      const result = await this.bookRepository.delete(id);
+
+      if (result.affected === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'El libro no se pudo eliminar',
+        });
+      }
+
+      return result;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 }
