@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryResponse } from './cloudinary-response';
-import streamifier from 'streamifier';
+import { Readable } from 'stream';
 
 @Injectable()
 export class CloudinaryService {
-  uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse> {
-    return new Promise<CloudinaryResponse>((resolve, reject) => {
+  async uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse> {
+    if (!file || !file.buffer) {
+      throw new Error('Archivo inválido o no recibido');
+    }
+
+    return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'books',
@@ -17,7 +21,8 @@ export class CloudinaryService {
         },
       );
 
-      streamifier.createReadStream(file.buffer).pipe(uploadStream);
+      const readable = Readable.from(file.buffer);
+      readable.pipe(uploadStream);
     });
   }
 }

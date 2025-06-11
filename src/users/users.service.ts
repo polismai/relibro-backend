@@ -84,7 +84,7 @@ export class UsersService {
       if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
-          message: `Usuario con email ${email} no fue encontrado`,
+          message: `El email ${email} no pertenece a un usuario registrado`,
         });
       }
 

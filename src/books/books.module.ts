@@ -1,3 +1,4 @@
+import { UsersModule } from '../users/users.module';
 import { Module } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { BooksController } from './books.controller';
@@ -8,7 +9,11 @@ import { User } from '../users/entities/user.entity';
 import { Image } from '../images/image.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Book, Image, User]), CloudinaryModule],
+  imports: [
+    TypeOrmModule.forFeature([Book, Image, User]),
+    CloudinaryModule,
+    UsersModule,
+  ],
   controllers: [BooksController],
   providers: [BooksService],
 })
