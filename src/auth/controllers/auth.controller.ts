@@ -51,6 +51,13 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('token');
+    return { message: 'Sesión cerrada' };
+  }
+
+  @UseGuards(AuthGuard)
   @Get('me')
   async getProfile(@Req() req: AuthResponse) {
     const user = req.user;
