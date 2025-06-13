@@ -11,7 +11,6 @@ export interface AuthBody {
 }
 
 export interface AuthResponse {
-  accessToken: string;
   user: User;
 }
 
