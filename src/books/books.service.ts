@@ -60,7 +60,9 @@ export class BooksService {
 
   public async findBooks(): Promise<Book[]> {
     try {
-      return await this.bookRepository.find();
+      return await this.bookRepository.find({
+        relations: ['images'],
+      });
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -68,7 +70,10 @@ export class BooksService {
 
   public async findBookById(id: string): Promise<Book> {
     try {
-      const book = await this.bookRepository.findOneBy({ id });
+      const book = await this.bookRepository.findOne({
+        where: { id },
+        relations: ['images'],
+      });
 
       if (!book) {
         throw new ErrorManager({

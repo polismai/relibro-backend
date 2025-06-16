@@ -11,6 +11,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import { Transform } from 'class-transformer';
 
 @Entity()
 export class Book extends BaseEntity implements IBook {
@@ -29,6 +30,7 @@ export class Book extends BaseEntity implements IBook {
   description?: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Transform(({ value }) => parseFloat(value))
   price: number;
 
   @Column({ default: true })
