@@ -17,6 +17,7 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { PublicAccess } from 'src/auth/decorators/public.decorator';
 
 @Controller('books')
 @UseGuards(AuthGuard)
@@ -38,6 +39,7 @@ export class BooksController {
     );
   }
 
+  @PublicAccess()
   @Get()
   public async findBooks() {
     return await this.booksService.findBooks();
