@@ -12,6 +12,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
+import { Genre } from 'src/common/enums/book-genre.enum';
 
 @Entity()
 export class Book extends BaseEntity implements IBook {
@@ -23,8 +24,11 @@ export class Book extends BaseEntity implements IBook {
   @Column()
   author?: string;
 
-  @Column()
-  genre?: string;
+  @Column({
+    type: 'enum',
+    enum: Genre,
+  })
+  genre?: Genre;
 
   @Column({ type: 'text' })
   description?: string;

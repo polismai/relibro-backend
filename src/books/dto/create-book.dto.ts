@@ -6,7 +6,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { BookCategory } from 'src/common/enums/book-category.enum';
+import { BookCategory } from '../../common/enums/book-category.enum';
+import { Genre } from '../../common/enums/book-genre.enum';
 
 export class CreateBookDto {
   @IsNotEmpty()
@@ -18,8 +19,8 @@ export class CreateBookDto {
   author?: string;
 
   @IsOptional()
-  @IsString()
-  genre?: string;
+  @IsEnum(Genre)
+  genre?: Genre;
 
   @IsOptional()
   @IsString()
