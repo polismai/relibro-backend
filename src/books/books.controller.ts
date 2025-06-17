@@ -45,6 +45,7 @@ export class BooksController {
     return await this.booksService.findBooks();
   }
 
+  @PublicAccess()
   @Get(':id')
   public async findBookById(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.booksService.findBookById(id);
