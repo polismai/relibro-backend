@@ -11,6 +11,7 @@ import {
   Req,
   ParseUUIDPipe,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { BooksService } from '../books.service';
 import { CreateBookDto } from '../dto/create-book.dto';
@@ -18,6 +19,7 @@ import { UpdateBookDto } from '../dto/update-book.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { PublicAccess } from '../../auth/decorators/public.decorator';
+import { BookCategory } from 'src/common/enums/book-category.enum';
 
 @Controller('books')
 @UseGuards(AuthGuard)
@@ -41,8 +43,8 @@ export class BooksController {
 
   @PublicAccess()
   @Get()
-  public async findBooks() {
-    return await this.booksService.findBooks();
+  public async findBooks(@Query('category') category?: BookCategory) {
+    return await this.booksService.findBooks(category);
   }
 
   @PublicAccess()

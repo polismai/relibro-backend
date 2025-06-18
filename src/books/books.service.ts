@@ -8,6 +8,7 @@ import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Image } from 'src/images/image.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { BookCategory } from 'src/common/enums/book-category.enum';
 
 @Injectable()
 export class BooksService {
@@ -58,9 +59,12 @@ export class BooksService {
     return savedBook;
   }
 
-  public async findBooks(): Promise<Book[]> {
+  public async findBooks(category?: BookCategory): Promise<Book[]> {
     try {
+      const whereCondition = category ? { category } : {};
+
       return await this.bookRepository.find({
+        where: whereCondition,
         relations: ['images'],
       });
     } catch (error) {

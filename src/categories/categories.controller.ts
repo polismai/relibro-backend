@@ -6,8 +6,8 @@ export class CategoriesController {
   @Get()
   findAll() {
     const labels = {
-      school: 'Escolar',
-      story: 'Literatura',
+      school: 'Libros escolares',
+      story: 'Libros de literatura',
     };
 
     return Object.values(BookCategory).map((value) => ({
