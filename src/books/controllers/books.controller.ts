@@ -19,7 +19,7 @@ import { UpdateBookDto } from '../dto/update-book.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { PublicAccess } from '../../auth/decorators/public.decorator';
-import { BookCategory } from 'src/common/enums/book-category.enum';
+import { BookFilterOptionsDto } from '../dto/book-filter-options.dto';
 
 @Controller('books')
 @UseGuards(AuthGuard)
@@ -42,9 +42,9 @@ export class BooksController {
   }
 
   @PublicAccess()
-  @Get()
-  public async findBooks(@Query('category') category?: BookCategory) {
-    return await this.booksService.findBooks(category);
+  @Get('filter')
+  public async findBooks(@Query() filters: BookFilterOptionsDto) {
+    return await this.booksService.findBooks(filters);
   }
 
   @PublicAccess()

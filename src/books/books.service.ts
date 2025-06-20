@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
-import { ErrorManager } from 'src/common/utils/error.manager';
+import { ErrorManager } from '../common/utils/error.manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult, DeleteResult } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Image } from 'src/images/image.entity';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { BookCategory } from 'src/common/enums/book-category.enum';
+import { User } from '../users/entities/user.entity';
+import { Image } from '../images/image.entity';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { BookFilterOptionsDto } from './dto/book-filter-options.dto';
 
 @Injectable()
 export class BooksService {
@@ -59,17 +59,47 @@ export class BooksService {
     return savedBook;
   }
 
-  public async findBooks(category?: BookCategory): Promise<Book[]> {
-    try {
-      const whereCondition = category ? { category } : {};
+  public async findBooks(filters: BookFilterOptionsDto): Promise<Book[]> {
+    const query = this.bookRepository
+      .createQueryBuilder('book')
+      .leftJoinAndSelect('book.images', 'image');
 
-      return await this.bookRepository.find({
-        where: whereCondition,
-        relations: ['images'],
+    if (filters.category) {
+      query.andWhere('book.category = :category', {
+        category: filters.category,
       });
-    } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
     }
+
+    if (filters.genre) {
+      query.andWhere('book.genre = :genre', { genre: filters.genre });
+    }
+
+    if (filters.minPrice !== undefined) {
+      query.andWhere('book.price >= :minPrice', { minPrice: filters.minPrice });
+    }
+
+    if (filters.maxPrice !== undefined) {
+      query.andWhere('book.price <= :maxPrice', { maxPrice: filters.maxPrice });
+    }
+
+    if (filters.sortBy) {
+      switch (filters.sortBy) {
+        case 'price_asc':
+          query.orderBy('book.price', 'ASC');
+          break;
+        case 'price_desc':
+          query.orderBy('book.price', 'DESC');
+          break;
+        case 'title_asc':
+          query.orderBy('book.title', 'ASC');
+          break;
+        case 'title_desc':
+          query.orderBy('book.title', 'DESC');
+          break;
+      }
+    }
+
+    return query.getMany();
   }
 
   public async findBookById(id: string): Promise<Book> {
