@@ -9,6 +9,7 @@ import { User } from '../users/entities/user.entity';
 import { Image } from '../images/image.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { BookFilterOptionsDto } from './dto/book-filter-options.dto';
+import { BookCategory } from 'src/common/enums/book-category.enum';
 
 @Injectable()
 export class BooksService {
@@ -41,6 +42,15 @@ export class BooksService {
       ...createBookDto,
       user,
     });
+
+    if (createBookDto.category === BookCategory.SCHOOL) {
+      if (!createBookDto.subject || !createBookDto.schoolYear) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'Debe completar la materia y el año escolar',
+        });
+      }
+    }
 
     const savedBook = await this.bookRepository.save(book);
 

@@ -33,6 +33,12 @@ export class Book extends BaseEntity implements IBook {
   @Column({ type: 'text' })
   description?: string;
 
+  @Column({ nullable: true })
+  subject?: string;
+
+  @Column({ nullable: true })
+  schoolYear?: string;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   @Transform(({ value }) => parseFloat(value))
   price: number;
