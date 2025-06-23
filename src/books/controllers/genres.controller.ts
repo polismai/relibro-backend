@@ -10,7 +10,6 @@ export class GenresController {
       fiction: 'Ciencia ficción',
       mystery: 'Misterio',
       fantasy: 'Fantasía',
-      romance: 'Romanticismo',
       history: 'Historia',
       biography: 'Biografía',
       science: 'Ciencia',

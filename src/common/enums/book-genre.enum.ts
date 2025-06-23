@@ -3,7 +3,6 @@ export enum Genre {
   FICTION = 'fiction',
   MYSTERY = 'mystery',
   FANTASY = 'fantasy',
-  ROMANCE = 'romance',
   HISTORY = 'history',
   BIOGRAPHY = 'biography',
   SCIENCE = 'science',
