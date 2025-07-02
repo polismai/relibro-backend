@@ -1,10 +1,11 @@
-export enum Genre {
+export enum BookGenre {
   CHILDREN = 'children',
-  FICTION = 'fiction',
-  MYSTERY = 'mystery',
-  FANTASY = 'fantasy',
-  HISTORY = 'history',
-  BIOGRAPHY = 'biography',
-  SCIENCE = 'science',
+  YOUNG_ADULT = 'young_adult',
+  NOVEL = 'novel',
+  SHORT_STORY = 'short_story',
+  MANUAL = 'manual',
+  DICTIONARY = 'dictionary',
+  EDUCATIONAL = 'educational',
+  COMIC = 'comic',
   OTHER = 'other',
 }

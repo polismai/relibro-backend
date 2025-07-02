@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Genre } from '../../common/enums/book-genre.enum';
+import { BookGenre } from '../../common/enums/book-genre.enum';
 
 @Controller('genres')
 export class GenresController {
@@ -7,16 +7,17 @@ export class GenresController {
   findAll() {
     const labels = {
       children: 'Infantil',
-      fiction: 'Ciencia ficción',
-      mystery: 'Misterio',
-      fantasy: 'Fantasía',
-      history: 'Historia',
-      biography: 'Biografía',
-      science: 'Ciencia',
-      other: 'Otro',
+      young_adult: 'Juvenil',
+      novel: 'Novela',
+      short_story: 'Cuento',
+      manual: 'Manual/Guía',
+      dictionary: 'Diccionario',
+      educational: 'Didáctico/Pedagógico',
+      comic: 'Cómic/Historieta',
+      other: 'Otros',
     };
 
-    return Object.values(Genre).map((value) => ({
+    return Object.values(BookGenre).map((value) => ({
       label: labels[value],
       value,
     }));
