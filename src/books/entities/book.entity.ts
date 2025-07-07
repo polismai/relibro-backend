@@ -34,6 +34,9 @@ export class Book extends BaseEntity implements IBook {
   description?: string;
 
   @Column({ nullable: true })
+  school?: string;
+
+  @Column({ nullable: true })
   subject?: string;
 
   @Column({ nullable: true })

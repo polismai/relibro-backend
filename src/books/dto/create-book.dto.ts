@@ -24,6 +24,10 @@ export class CreateBookDto {
 
   @IsOptional()
   @IsString()
+  school?: string;
+
+  @IsOptional()
+  @IsString()
   subject?: string;
 
   @IsOptional()
