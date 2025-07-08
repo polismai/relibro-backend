@@ -84,6 +84,10 @@ export class BooksService {
       query.andWhere('book.genre = :genre', { genre: filters.genre });
     }
 
+    if (filters.school) {
+      query.andWhere('book.school = :school', { school: filters.school });
+    }
+
     if (filters.minPrice !== undefined) {
       query.andWhere('book.price >= :minPrice', { minPrice: filters.minPrice });
     }
@@ -107,6 +111,12 @@ export class BooksService {
           query.orderBy('book.title', 'DESC');
           break;
       }
+    }
+
+    if (filters.search) {
+      query.andWhere('LOWER(book.title) LIKE LOWER(:search)', {
+        search: `%${filters.search}%`,
+      });
     }
 
     return query.getMany();

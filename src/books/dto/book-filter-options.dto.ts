@@ -7,4 +7,5 @@ export class BookFilterOptionsDto {
   maxPrice?: number;
   school?: string;
   sortBy?: 'price_asc' | 'price_desc' | 'title_asc' | 'title_desc';
+  search?: string;
 }
