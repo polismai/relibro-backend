@@ -41,6 +41,13 @@ export class BooksController {
     );
   }
 
+  @Get('my-books')
+  @UseGuards(AuthGuard)
+  getMyBooks(@Req() req) {
+    const userId = req.user.id;
+    return this.booksService.findBooksByUser(userId);
+  }
+
   @PublicAccess()
   @Get('filter')
   public async findBooks(@Query() filters: BookFilterOptionsDto) {

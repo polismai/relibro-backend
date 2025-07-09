@@ -69,6 +69,13 @@ export class BooksService {
     return savedBook;
   }
 
+  async findBooksByUser(userId: string): Promise<Book[]> {
+    return this.bookRepository.find({
+      where: { user: { id: userId } },
+      relations: ['images'],
+    });
+  }
+
   public async findBooks(filters: BookFilterOptionsDto): Promise<Book[]> {
     const query = this.bookRepository
       .createQueryBuilder('book')
