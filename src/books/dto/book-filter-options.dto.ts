@@ -1,6 +1,7 @@
 import { BookCategory } from '../../common/enums/book-category.enum';
 
 export class BookFilterOptionsDto {
+  onlyAvailable?: boolean;
   category?: BookCategory;
   genre?: string;
   minPrice?: number;

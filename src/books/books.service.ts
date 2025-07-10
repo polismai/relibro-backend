@@ -81,6 +81,10 @@ export class BooksService {
       .createQueryBuilder('book')
       .leftJoinAndSelect('book.images', 'image');
 
+    if (filters.onlyAvailable !== false) {
+      query.andWhere('book.isAvailable = :isAvailable', { isAvailable: true });
+    }
+
     if (filters.category) {
       query.andWhere('book.category = :category', {
         category: filters.category,
