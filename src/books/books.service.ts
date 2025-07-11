@@ -91,6 +91,16 @@ export class BooksService {
       });
     }
 
+    if (filters.subject) {
+      query.andWhere('book.subject = :subject', { subject: filters.subject });
+    }
+
+    if (filters.schoolYear) {
+      query.andWhere('book.schoolYear = :schoolYear', {
+        schoolYear: filters.schoolYear,
+      });
+    }
+
     if (filters.genre) {
       query.andWhere('book.genre = :genre', { genre: filters.genre });
     }

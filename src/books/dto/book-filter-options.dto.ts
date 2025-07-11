@@ -4,6 +4,8 @@ export class BookFilterOptionsDto {
   onlyAvailable?: boolean;
   category?: BookCategory;
   genre?: string;
+  subject?: string;
+  schoolYear?: string;
   minPrice?: number;
   maxPrice?: number;
   school?: string;
