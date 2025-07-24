@@ -8,6 +8,8 @@ import {
 } from 'class-validator';
 import { BookCategory } from '../../common/enums/book-category.enum';
 import { BookGenre } from '../../common/enums/book-genre.enum';
+import { SchoolYear } from 'src/common/enums/school-years.enum';
+import { PrivateSchool } from 'src/common/enums/schools.enum';
 
 export class CreateBookDto {
   @IsNotEmpty()
@@ -23,16 +25,16 @@ export class CreateBookDto {
   genre?: BookGenre;
 
   @IsOptional()
-  @IsString()
-  school?: string;
+  @IsEnum(PrivateSchool, { message: 'Invalid school' })
+  school?: PrivateSchool;
 
   @IsOptional()
   @IsString()
   subject?: string;
 
   @IsOptional()
-  @IsString()
-  schoolYear?: string;
+  @IsEnum(SchoolYear, { message: 'Invalid school year' })
+  schoolYear?: SchoolYear;
 
   @IsOptional()
   @IsString()
