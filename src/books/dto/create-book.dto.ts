@@ -38,6 +38,10 @@ export class CreateBookDto {
 
   @IsOptional()
   @IsString()
+  conditionNote?: string;
+
+  @IsOptional()
+  @IsString()
   description?: string;
 
   @IsNotEmpty()

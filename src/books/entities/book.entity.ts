@@ -13,6 +13,8 @@ import {
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { BookGenre } from 'src/common/enums/book-genre.enum';
+import { PrivateSchool } from 'src/common/enums/schools.enum';
+import { SchoolYear } from 'src/common/enums/school-years.enum';
 
 @Entity()
 export class Book extends BaseEntity implements IBook {
@@ -21,26 +23,38 @@ export class Book extends BaseEntity implements IBook {
   title: string;
 
   @Index()
-  @Column()
+  @Column({ nullable: true })
   author?: string;
 
   @Column({
     type: 'enum',
     enum: BookGenre,
+    nullable: true,
   })
   genre?: BookGenre;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @Column({ nullable: true })
-  school?: string;
+  @Column({ type: 'text', nullable: true })
+  conditionNote?: string;
+
+  @Column({
+    type: 'enum',
+    enum: PrivateSchool,
+    nullable: true,
+  })
+  school?: PrivateSchool;
 
   @Column({ nullable: true })
   subject?: string;
 
-  @Column({ nullable: true })
-  schoolYear?: string;
+  @Column({
+    type: 'enum',
+    enum: SchoolYear,
+    nullable: true,
+  })
+  schoolYear?: SchoolYear;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   @Transform(({ value }) => parseFloat(value))
