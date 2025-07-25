@@ -10,6 +10,7 @@ import { BookCategory } from '../../common/enums/book-category.enum';
 import { BookGenre } from '../../common/enums/book-genre.enum';
 import { SchoolYear } from 'src/common/enums/school-years.enum';
 import { PrivateSchool } from 'src/common/enums/schools.enum';
+import { Transform } from 'class-transformer';
 
 export class CreateBookDto {
   @IsNotEmpty()
@@ -26,6 +27,7 @@ export class CreateBookDto {
 
   @IsOptional()
   @IsEnum(PrivateSchool, { message: 'Invalid school' })
+  @Transform(({ value }) => (value === '' ? undefined : value))
   school?: PrivateSchool;
 
   @IsOptional()
@@ -34,6 +36,7 @@ export class CreateBookDto {
 
   @IsOptional()
   @IsEnum(SchoolYear, { message: 'Invalid school year' })
+  @Transform(({ value }) => (value === '' ? undefined : value))
   schoolYear?: SchoolYear;
 
   @IsOptional()
