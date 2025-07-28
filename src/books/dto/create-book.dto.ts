@@ -5,11 +5,11 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
 } from 'class-validator';
 import { BookCategory } from '../../common/enums/book-category.enum';
 import { BookGenre } from '../../common/enums/book-genre.enum';
-import { SchoolYear } from 'src/common/enums/school-years.enum';
-import { PrivateSchool } from 'src/common/enums/schools.enum';
+import { SchoolYear } from '../../common/enums/school-years.enum';
 import { Transform } from 'class-transformer';
 
 export class CreateBookDto {
@@ -26,9 +26,8 @@ export class CreateBookDto {
   genre?: BookGenre;
 
   @IsOptional()
-  @IsEnum(PrivateSchool, { message: 'Invalid school' })
-  @Transform(({ value }) => (value === '' ? undefined : value))
-  school?: PrivateSchool;
+  @IsUUID('4', { message: 'Invalid school ID' })
+  schoolId?: string;
 
   @IsOptional()
   @IsString()

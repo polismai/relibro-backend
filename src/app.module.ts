@@ -7,7 +7,7 @@ import { BooksModule } from './books/books.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
-import { SchoolsModule } from './schools/schools.module';
+import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
@@ -17,9 +17,9 @@ import { SchoolsModule } from './schools/schools.module';
     TypeOrmModule.forRoot({ ...DataSourceConfig }),
     UsersModule,
     BooksModule,
-    SchoolsModule,
     AuthModule,
     CategoriesModule,
+    SchoolModule,
   ],
   controllers: [],
   providers: [

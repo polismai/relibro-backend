@@ -9,13 +9,17 @@ import { User } from '../users/entities/user.entity';
 import { Image } from '../images/image.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { BookFilterOptionsDto } from './dto/book-filter-options.dto';
-import { BookCategory } from 'src/common/enums/book-category.enum';
+import { BookCategory } from '../common/enums/book-category.enum';
+import { School } from '../school/entities/school.entity';
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
+
+    @InjectRepository(School)
+    private readonly schoolRepository: Repository<School>,
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -38,10 +42,20 @@ export class BooksService {
         message: 'Usuario no encontrado',
       });
 
-    const book = this.bookRepository.create({
-      ...createBookDto,
-      user,
-    });
+    let school: School | null = null;
+
+    if (createBookDto.schoolId) {
+      school = await this.schoolRepository.findOne({
+        where: { id: createBookDto.schoolId },
+      });
+    }
+
+    if (!school) {
+      throw new ErrorManager({
+        type: 'NOT_FOUND',
+        message: 'Colegio no encontrado',
+      });
+    }
 
     if (createBookDto.category === BookCategory.SCHOOL) {
       if (!createBookDto.subject || !createBookDto.schoolYear) {
@@ -51,6 +65,12 @@ export class BooksService {
         });
       }
     }
+
+    const book = this.bookRepository.create({
+      ...createBookDto,
+      user,
+      school,
+    });
 
     const savedBook = await this.bookRepository.save(book);
 

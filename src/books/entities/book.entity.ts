@@ -12,9 +12,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
-import { BookGenre } from 'src/common/enums/book-genre.enum';
-import { PrivateSchool } from 'src/common/enums/schools.enum';
-import { SchoolYear } from 'src/common/enums/school-years.enum';
+import { BookGenre } from '../../common/enums/book-genre.enum';
+import { SchoolYear } from '../../common/enums/school-years.enum';
+import { School } from '../../school/entities/school.entity';
 
 @Entity()
 export class Book extends BaseEntity implements IBook {
@@ -38,13 +38,6 @@ export class Book extends BaseEntity implements IBook {
 
   @Column({ type: 'text', nullable: true })
   conditionNote?: string;
-
-  @Column({
-    type: 'enum',
-    enum: PrivateSchool,
-    nullable: true,
-  })
-  school?: PrivateSchool;
 
   @Column({ nullable: true })
   subject?: string;
@@ -75,4 +68,11 @@ export class Book extends BaseEntity implements IBook {
   @ManyToOne(() => User, (user) => user.books, { eager: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => School, (school) => school.books, {
+    nullable: true,
+    eager: true,
+  })
+  @JoinColumn({ name: 'school_id' })
+  school?: School;
 }

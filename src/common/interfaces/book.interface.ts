@@ -1,4 +1,4 @@
-import { BookCategory } from 'src/common/enums/book-category.enum';
+import { BookCategory } from '../../common/enums/book-category.enum';
 import { IImage } from './image.interface';
 
 export interface IBook {

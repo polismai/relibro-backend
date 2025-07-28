@@ -8,10 +8,11 @@ import { Book } from './entities/book.entity';
 import { User } from '../users/entities/user.entity';
 import { Image } from '../images/image.entity';
 import { GenresController } from './controllers/genres.controller';
+import { School } from '../school/entities/school.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Book, Image, User]),
+    TypeOrmModule.forFeature([Book, Image, User, School]),
     CloudinaryModule,
     UsersModule,
   ],
