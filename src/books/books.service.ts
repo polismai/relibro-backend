@@ -58,7 +58,7 @@ export class BooksService {
     }
 
     if (createBookDto.category === BookCategory.SCHOOL) {
-      if (!createBookDto.subject || !createBookDto.schoolYear) {
+      if (!createBookDto.subject || !createBookDto.schoolYearId) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'Debe completar la materia y el año escolar',

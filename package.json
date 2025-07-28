@@ -8,6 +8,8 @@
   "scripts": {
     "build": "nest build",
     "seed:schools": "ts-node src/school/school.seed.ts",
+    "seed:school-year": "ts-node src/school-year/school-year.seed.ts",
+    "seed:all": "yarn seed:school && yarn seed:school-year",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "export NODE_ENV=development.local && nest start --watch",

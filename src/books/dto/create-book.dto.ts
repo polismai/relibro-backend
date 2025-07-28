@@ -9,8 +9,6 @@ import {
 } from 'class-validator';
 import { BookCategory } from '../../common/enums/book-category.enum';
 import { BookGenre } from '../../common/enums/book-genre.enum';
-import { SchoolYear } from '../../common/enums/school-years.enum';
-import { Transform } from 'class-transformer';
 
 export class CreateBookDto {
   @IsNotEmpty()
@@ -34,9 +32,8 @@ export class CreateBookDto {
   subject?: string;
 
   @IsOptional()
-  @IsEnum(SchoolYear, { message: 'Invalid school year' })
-  @Transform(({ value }) => (value === '' ? undefined : value))
-  schoolYear?: SchoolYear;
+  @IsUUID('4', { message: 'Invalid schoolYear ID' })
+  schoolYearId?: string;
 
   @IsOptional()
   @IsString()

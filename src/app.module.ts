@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
 import { SchoolModule } from './school/school.module';
+import { SchoolYearModule } from './school-year/school-year.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SchoolModule } from './school/school.module';
     AuthModule,
     CategoriesModule,
     SchoolModule,
+    SchoolYearModule,
   ],
   controllers: [],
   providers: [

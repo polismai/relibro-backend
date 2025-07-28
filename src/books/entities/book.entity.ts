@@ -13,8 +13,8 @@ import {
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import { BookGenre } from '../../common/enums/book-genre.enum';
-import { SchoolYear } from '../../common/enums/school-years.enum';
 import { School } from '../../school/entities/school.entity';
+import { SchoolYear } from '../../school-year/entities/school-year.entity';
 
 @Entity()
 export class Book extends BaseEntity implements IBook {
@@ -42,13 +42,6 @@ export class Book extends BaseEntity implements IBook {
   @Column({ nullable: true })
   subject?: string;
 
-  @Column({
-    type: 'enum',
-    enum: SchoolYear,
-    nullable: true,
-  })
-  schoolYear?: SchoolYear;
-
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   @Transform(({ value }) => parseFloat(value))
   price: number;
@@ -75,4 +68,11 @@ export class Book extends BaseEntity implements IBook {
   })
   @JoinColumn({ name: 'school_id' })
   school?: School;
+
+  @ManyToOne(() => SchoolYear, (schoolYear) => schoolYear.books, {
+    nullable: true,
+    eager: true,
+  })
+  @JoinColumn({ name: 'school_year_id' })
+  schoolYear?: SchoolYear;
 }

@@ -1,4 +1,3 @@
-// src/school/school.seed.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { DataSource } from 'typeorm';
