@@ -20,7 +20,11 @@ export class User extends BaseEntity implements IUser {
   @Column()
   password: string;
 
-  @Column({ type: 'enum', enum: Role })
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+  })
   role: Role;
 
   @OneToMany(() => Book, (book) => book.user)
