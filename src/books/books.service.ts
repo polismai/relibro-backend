@@ -35,58 +35,76 @@ export class BooksService {
     files: Express.Multer.File[],
     userId: string,
   ): Promise<Book> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user)
-      throw new ErrorManager({
-        type: 'NOT_FOUND',
-        message: 'Usuario no encontrado',
-      });
+    try {
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+      if (!user)
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'Usuario no encontrado',
+        });
 
-    let school: School | null = null;
-
-    if (createBookDto.schoolId) {
-      school = await this.schoolRepository.findOne({
-        where: { id: createBookDto.schoolId },
-      });
-    }
-
-    if (!school) {
-      throw new ErrorManager({
-        type: 'NOT_FOUND',
-        message: 'Colegio no encontrado',
-      });
-    }
-
-    if (createBookDto.category === BookCategory.SCHOOL) {
-      if (!createBookDto.subject || !createBookDto.schoolYearId) {
+      if (!user.contactPhone) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
-          message: 'Debe completar la materia y el año escolar',
+          message:
+            'Debe agregar un teléfono de contacto para publicar un libro',
         });
       }
-    }
 
-    const book = this.bookRepository.create({
-      ...createBookDto,
-      user,
-      school,
-    });
+      let school: School | null = null;
 
-    const savedBook = await this.bookRepository.save(book);
+      if (createBookDto.category === BookCategory.SCHOOL) {
+        if (!createBookDto.schoolId) {
+          throw new ErrorManager({
+            type: 'BAD_REQUEST',
+            message: 'Debe seleccionar un colegio',
+          });
+        }
 
-    const imageEntities = await Promise.all(
-      files.map(async (file) => {
-        const uploadResult = await this.cloudinaryService.uploadFile(file);
-        const image = this.imageRepository.create({
-          url: uploadResult.secure_url,
-          book: savedBook,
+        school = await this.schoolRepository.findOne({
+          where: { id: createBookDto.schoolId },
         });
-        return this.imageRepository.save(image);
-      }),
-    );
 
-    savedBook.images = imageEntities;
-    return savedBook;
+        if (!school) {
+          throw new ErrorManager({
+            type: 'NOT_FOUND',
+            message: 'Colegio no encontrado',
+          });
+        }
+
+        if (!createBookDto.subject || !createBookDto.schoolYearId) {
+          throw new ErrorManager({
+            type: 'BAD_REQUEST',
+            message: 'Debe completar la materia y el año escolar',
+          });
+        }
+      }
+
+      const book = this.bookRepository.create({
+        ...createBookDto,
+        user,
+        school,
+      });
+
+      const savedBook = await this.bookRepository.save(book);
+
+      const imageEntities = await Promise.all(
+        files.map(async (file) => {
+          const uploadResult = await this.cloudinaryService.uploadFile(file);
+          const image = this.imageRepository.create({
+            url: uploadResult.secure_url,
+            book: savedBook,
+          });
+          return this.imageRepository.save(image);
+        }),
+      );
+
+      savedBook.images = imageEntities;
+      return savedBook;
+    } catch (error) {
+      console.error('Error en createBookWithImages:', error);
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
   async findBooksByUser(userId: string): Promise<Book[]> {

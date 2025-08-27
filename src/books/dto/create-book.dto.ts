@@ -25,7 +25,7 @@ export class CreateBookDto {
 
   @IsOptional()
   @IsUUID('4', { message: 'Invalid school ID' })
-  schoolId?: string;
+  schoolId?: string | null;
 
   @IsOptional()
   @IsString()
@@ -33,7 +33,7 @@ export class CreateBookDto {
 
   @IsOptional()
   @IsUUID('4', { message: 'Invalid schoolYear ID' })
-  schoolYearId?: string;
+  schoolYearId?: string | null;
 
   @IsOptional()
   @IsString()

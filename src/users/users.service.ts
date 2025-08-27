@@ -116,6 +116,16 @@ export class UsersService {
     }
   }
 
+  // public async updateContactPhone(userId: string, phone: string) {
+  //   try {
+  //     const user = await this.findUserById(userId);
+  //     user.contactPhone = phone;
+  //     return await this.userRepository.save(user);
+  //   } catch (error) {
+  //     throw ErrorManager.createSignatureError(error.message);
+  //   }
+  // }
+
   public async deleteUser(id: string): Promise<DeleteResult> {
     try {
       await this.findUserById(id);

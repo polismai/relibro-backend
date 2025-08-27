@@ -44,6 +44,15 @@ export class UsersController {
     return await this.usersService.updateUser(id, updateUserDto);
   }
 
+  // @Patch(':id/contact-phone')
+  // public async updateContactPhone(
+  //   @Param('id', new ParseUUIDPipe()) id: string,
+  //   @Body() updateUserDto: UpdateUserDto,
+  // ) {
+  //   const { contactPhone } = updateUserDto;
+  //   return this.usersService.updateContactPhone(id, contactPhone);
+  // }
+
   @Delete(':id')
   public async deleteUser(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.usersService.deleteUser(id);

@@ -27,6 +27,9 @@ export class User extends BaseEntity implements IUser {
   })
   role: Role;
 
+  @Column({ nullable: true })
+  contactPhone?: string;
+
   @OneToMany(() => Book, (book) => book.user)
   books: Book[];
 }
