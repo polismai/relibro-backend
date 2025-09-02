@@ -24,6 +24,12 @@ export class AuthService {
     return isPasswordValid ? user : null;
   }
 
+  public async validateGoogleUser(email: string): Promise<User | null> {
+    const user = await this.usersService.findUserByEmail(email);
+    if (!user) return null;
+    return user;
+  }
+
   public signJWT({
     payload,
     secret,

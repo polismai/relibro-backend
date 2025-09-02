@@ -24,7 +24,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  async login(
+  async loginWithCredentils(
     @Body() authDto: AuthDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<{ user: User }> {
@@ -35,6 +35,32 @@ export class AuthController {
       throw new ErrorManager({
         type: 'BAD_REQUEST',
         message: 'Credenciales inválidas',
+      });
+    }
+
+    const { accessToken } = await this.authService.generateJWT(user);
+
+    res.cookie('token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    return { user };
+  }
+
+  @Post('google')
+  async loginWithGoogle(
+    @Body('email') email: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ user: User }> {
+    const user = await this.authService.validateGoogleUser(email);
+
+    if (!user) {
+      throw new ErrorManager({
+        type: 'BAD_REQUEST',
+        message: 'Email no registrado',
       });
     }
 
