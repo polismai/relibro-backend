@@ -16,7 +16,7 @@ export class UsersService {
 
   public async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const { email, password } = createUserDto;
+      const { email } = createUserDto;
 
       const existingUser = await this.userRepository.findOne({
         where: { email },
@@ -29,10 +29,13 @@ export class UsersService {
         });
       }
 
-      const hashedPassword = await bcrypt.hash(
-        password,
-        Number(process.env.HASH_SALT),
-      );
+      let hashedPassword: string | null = null;
+      if (createUserDto.password) {
+        hashedPassword = await bcrypt.hash(
+          createUserDto.password,
+          Number(process.env.HASH_SALT),
+        );
+      }
 
       const newUser = this.userRepository.create({
         ...createUserDto,
@@ -92,6 +95,10 @@ export class UsersService {
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
+  }
+
+  public async findUserByEmailOrNull(email: string): Promise<User | null> {
+    return await this.userRepository.findOneBy({ email });
   }
 
   public async updateUser(

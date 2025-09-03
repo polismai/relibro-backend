@@ -24,9 +24,24 @@ export class AuthService {
     return isPasswordValid ? user : null;
   }
 
-  public async validateGoogleUser(email: string): Promise<User | null> {
-    const user = await this.usersService.findUserByEmail(email);
-    if (!user) return null;
+  public async validateGoogleUser(body: {
+    email: string;
+    name: string;
+  }): Promise<User | null> {
+    let user = await this.usersService.findUserByEmailOrNull(body.email);
+
+    if (!user) {
+      const [firstName, ...rest] = body.name.split(' ');
+      const lastName = rest.join(' ');
+
+      user = await this.usersService.createUser({
+        email: body.email,
+        firstName,
+        password: null,
+        lastName: lastName || '',
+      });
+    }
+
     return user;
   }
 

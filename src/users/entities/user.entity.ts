@@ -17,7 +17,7 @@ export class User extends BaseEntity implements IUser {
   email: string;
 
   @Exclude()
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   @Column({

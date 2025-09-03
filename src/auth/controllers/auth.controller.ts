@@ -52,17 +52,10 @@ export class AuthController {
 
   @Post('google')
   async loginWithGoogle(
-    @Body('email') email: string,
+    @Body() body: { email: string; name: string },
     @Res({ passthrough: true }) res: Response,
   ): Promise<{ user: User }> {
-    const user = await this.authService.validateGoogleUser(email);
-
-    if (!user) {
-      throw new ErrorManager({
-        type: 'BAD_REQUEST',
-        message: 'Email no registrado',
-      });
-    }
+    const user = await this.authService.validateGoogleUser(body);
 
     const { accessToken } = await this.authService.generateJWT(user);
 
