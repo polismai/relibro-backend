@@ -9,6 +9,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CategoriesModule } from './categories/categories.module';
 import { SchoolModule } from './school/school.module';
 import { SchoolYearModule } from './school-year/school-year.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SchoolYearModule } from './school-year/school-year.module';
     UsersModule,
     BooksModule,
     AuthModule,
+    PaymentsModule,
     CategoriesModule,
     SchoolModule,
     SchoolYearModule,
