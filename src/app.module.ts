@@ -10,6 +10,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { SchoolModule } from './school/school.module';
 import { SchoolYearModule } from './school-year/school-year.module';
 import { PaymentsModule } from './payments/payments.module';
+import { DepartmentsController } from './department/department.controller';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { PaymentsModule } from './payments/payments.module';
     SchoolModule,
     SchoolYearModule,
   ],
-  controllers: [],
+  controllers: [DepartmentsController],
   providers: [
     {
       provide: APP_INTERCEPTOR,

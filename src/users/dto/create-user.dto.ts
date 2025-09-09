@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
+import { Department } from 'src/common/enums/department.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -23,4 +30,8 @@ export class CreateUserDto {
     message: 'contactPhone must contain only numbers, spaces, + or -',
   })
   contactPhone?: string;
+
+  @IsOptional()
+  @IsEnum(Department)
+  department?: Department;
 }

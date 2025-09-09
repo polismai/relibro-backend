@@ -4,6 +4,7 @@ import { IUser } from '../../common/interfaces/user.interface';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Role } from '../../common/enums/role.enum';
+import { Department } from 'src/common/enums/department.enum';
 
 @Entity()
 export class User extends BaseEntity implements IUser {
@@ -29,6 +30,13 @@ export class User extends BaseEntity implements IUser {
 
   @Column({ nullable: true })
   contactPhone?: string;
+
+  @Column({
+    type: 'enum',
+    enum: Department,
+    nullable: true,
+  })
+  department?: Department;
 
   @OneToMany(() => Book, (book) => book.user)
   books: Book[];
