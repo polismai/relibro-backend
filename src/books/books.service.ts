@@ -129,6 +129,12 @@ export class BooksService {
       });
     }
 
+    if (filters.department) {
+      query.andWhere('book.department = :department', {
+        department: filters.department,
+      });
+    }
+
     if (filters.subject) {
       query.andWhere('book.subject = :subject', { subject: filters.subject });
     }
