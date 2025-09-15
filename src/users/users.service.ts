@@ -104,7 +104,7 @@ export class UsersService {
   public async updateUser(
     id: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<UpdateResult> {
+  ): Promise<User> {
     try {
       await this.findUserById(id);
 
@@ -117,7 +117,7 @@ export class UsersService {
         });
       }
 
-      return result;
+      return this.findUserById(id);
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
